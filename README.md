@@ -17,12 +17,12 @@ This stack is implemented using a regular C array that is where the farthest mos
 
 ## Interaction
 
-This program runs from STDIN or from user input without a prompt.
+This program runs from command line arguments.
 
 Example usage:
 
 ```bash
-echo "1 1 +\n" | ./main
+./main "1 SIN"
 ```
 
 ## Operations
