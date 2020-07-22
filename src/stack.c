@@ -2,48 +2,54 @@
 #include <stdlib.h>
 #include "../includes/stack.h"
 
-
-void push(double value){
-  if(stack_pointer_ == STACK_SIZE){
-    fprintf(stderr, "cannot push to stack, it is full!\n");
-    return;
-  }
-  stack[stack_pointer_++] = value;
+struct stack* stack_constructor(){
+    struct stack* st = (struct stack*)malloc(sizeof(struct stack));
+    st->stack_pointer_ = 0;
+    double* contents = (double*)malloc(sizeof(double) * STACK_SIZE);
+    st->contents = contents;
+    return st;
 }
 
-double peek(){
-  if(stack_pointer_ == 0){
-    fprintf(stderr, "cannot peek value, stack is empty!\n");
-    return 0.0;
-  }
-  return stack[stack_pointer_-1];
+void stack_destructor(struct stack* st){
+    free(st->contents);
+    free(st);
 }
 
-double peek_n(int position){
-  if((stack_pointer_ - position) > 0){
-    fprintf(stderr, "cannot peek that far!\n");
-  }
-  return stack[stack_pointer_-position];
+void push(struct stack* st, double value){
+    if(st->stack_pointer_ >= STACK_SIZE){
+        fprintf(stderr, "stack full!\n");
+        return;
+    }
+    st->contents[st->stack_pointer_++] = value;
 }
 
-double pop(){
-  if(stack_pointer_ == 0){
-    fprintf(stderr, "cannot pop value, stack is empty!\n");
-    return 0.0;
-  }
-  return stack[--stack_pointer_];
+double peek(struct stack* st){
+    if(st->stack_pointer_ == 0){
+        fprintf(stderr, "cannot peek value, stack is empty!\n");
+        return 0.0;
+    }
+    return st->contents[st->stack_pointer_-1];
 }
 
-void clear_stack(){
-  while(--stack_pointer_ > 0){
-    pop();
+double peek_n(struct stack* st, int position){
+    if(st->stack_pointer_ - position > 0){
+
+        fprintf(stderr, "cannot peek that far!\n");
+    }
+    return st->contents[st->stack_pointer_-position];
+}
+
+double pop(struct stack* st){
+    if(st->stack_pointer_ == 0){
+        fprintf(stderr, "cannot pop value, stack is empty!\n");
+        return 0.0;
+    }
+    return st->contents[--st->stack_pointer_];
+}
+
+void clear_stack(struct stack* st){
+  while(--st->stack_pointer_ > 0){
+    pop(st);
   }
 }
 
-double* duplicate_stack(){
-  double* duplicated_stack = (double*) malloc(STACK_SIZE * sizeof(double));
-  for(int i = 0; i < STACK_SIZE; ++i){
-    duplicated_stack[i] = stack[i];
-  }
-  return duplicated_stack;
-}

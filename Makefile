@@ -17,7 +17,7 @@ stack.o: src/stack.c includes/stack.h
 hash_table.o: src/hash_table.c includes/hash_table.h
 	$(COMPILER) -c -g src/hash_table.c
 run:
-	./$(OUTPUT) "1 1 +"
+	./$(OUTPUT) "1 SIN"
 clean: object_clean
 	rm $(OUTPUT)
 object_clean:

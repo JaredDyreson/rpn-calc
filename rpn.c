@@ -11,8 +11,6 @@
 // all code here and in local imports written by Jared Dyreson, California State University Fullerton (889546529)
 //
 
-static int stack_pointer_ = 0;
-static double stack[STACK_SIZE];
 
 int main(int argc, const char* argv[]){
     if(argc < 2){
@@ -31,24 +29,24 @@ int main(int argc, const char* argv[]){
     double value_;
     struct hash_table* map = new_hash_table();
     bool break_condition = false;
-    double* cloned_stack = NULL;
+    struct stack* st = stack_constructor();
 
     char* token = strtok(line, " ");
     while(token){
         operand_code_value_ = operand_code(token);
         switch(operand_code_value_){
             case NUMBER:
-                push(strtod(token, &pointer));
+                push(st, strtod(token, &pointer));
                 break;
             case GARBAGE:
                 fprintf(stderr, "got garbage value from operand of value: %s\n", token);
-                clear_stack();
+                clear_stack(st);
                 break;
             case ASSIGN:
                 // we want to remove the first element in the buffer, then move pointer along
                 memmove(token, token+1, strlen(token));
                 if(is_var_name_valid_(token)){
-                    value_ = pop();
+                    value_ = pop(st);
                     insert(map, token, value_);
                     fprintf(stdout, "inserted key: %s with value of: %g\n", token, value_);
                     break;
@@ -56,29 +54,24 @@ int main(int argc, const char* argv[]){
                 break;
             case RETRIEVE:
                 memmove(token, token+1, strlen(token));
-                push(get_key(map, token));
-                fprintf(stdout, "retrieved key: %s with value of: %g\n", token, peek());
-                break;
-            case CLONE:
-                cloned_stack = duplicate_stack();
-                fprintf(stdout, "cloned the stack!\n");
+                push(st, get_key(map, token));
+                fprintf(stdout, "retrieved key: %s with value of: %g\n", token, peek(st));
                 break;
             case EXIT:
                 break_condition = true;
                 break;
             default: 
-                rpn_calc(operand_code_value_);
+                rpn_calc(st, operand_code_value_);
                 break;
         }
         token = strtok(NULL, " ");
     }
 
 
-    fprintf(stdout, "%.8g\n", pop()); 
+    fprintf(stdout, "%.8g\n", pop(st)); 
 
     // we need to free the memory we allocated throughout the lifetime of the program
     if(line != NULL){ free(line); }
-    else if(cloned_stack != NULL){ free(cloned_stack); }
     destructor_(map);
     return 0;
 }
