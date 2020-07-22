@@ -3,11 +3,11 @@
 #include <math.h>
 #include <string.h>
 
-#include "parser.h" // get the operand codes
-#include "hash_table.h" // store the variable values (python dictionary equivalent)
-#include "split.h" // split the string into string of strings (python string.split() function)
-#include "stack.h" // pushing, popping, peeking on the stack
-#include "rpn_calculator.h" // all the math functionality of this program. Please refer to this header and parser.h to implement more math functions
+#include "includes/parser.h" // get the operand codes
+#include "includes/hash_table.h" // store the variable values (python dictionary equivalent)
+#include "includes/split.h" // split the string into string of strings (python string.split() function)
+#include "includes/stack.h" // pushing, popping, peeking on the stack
+#include "includes/rpn_calculator.h" // all the math functionality of this program. Please refer to this header and parser.h to implement more math functions
 
 // all code here and in local imports written by Jared Dyreson, California State University Fullerton (889546529)
 
